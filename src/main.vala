@@ -11,6 +11,8 @@ public class State {
     
     public Wlr.Renderer renderer;
     public Wlr.Allocator allocator;
+    
+    public SampleOutput sample_output;
 
     public State() {
         new_output_listener.notify = _new_output;
@@ -25,8 +27,19 @@ public class State {
     }
 
     public void new_output(Wlr.Output output) {
-        Wlr.log(Wlr.LogImportance.INFO, "New output");
         output.init_render(allocator, renderer);
+        
+        sample_output = new SampleOutput() {
+            output = output
+        };
+        
+        var output_state = Wlr.OutputState();
+        output_state.set_enabled(true);
+        if (output.preferred_mode != null) {
+            output_state.set_mode(output.preferred_mode);
+        }
+        
+        output.commit_state(output_state);
     }
 
     public static void _new_input(Wl.Listener listener, void* data) {
@@ -38,6 +51,12 @@ public class State {
     public void new_input() {
         Wlr.log(Wlr.LogImportance.INFO, "New input");
     }
+}
+
+public class SampleOutput {
+    public unowned Wlr.Output output;
+    public Wl.Listener frame;
+    public Wl.Listener destroy;
 }
 
 public State state;

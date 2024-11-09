@@ -48,6 +48,30 @@ namespace Wlr {
     [Compact]
     [CCode (cname = "struct wlr_output", free_function = "", cheader_filename = "wlr/types/wlr_output.h")]
     public class Output {
+        public OutputMode preferred_mode { [CCode (cname = "wlr_output_preferred_mode")] get; }
+        
         public void init_render(Allocator allocator, Renderer renderer);
+        public void commit_state(OutputState state);
+        
+        [CCode (cname = "events.frame")]
+        public Wl.Signal frame;
+        [CCode (cname = "events.destroy")]
+        public Wl.Signal destroy;
+    }
+    
+    [CCode (cname = "struct wlr_output_state", destroy_function = "wlr_output_state_finish", cheader_filename = "wlr/types/wlr_output.h")]
+    public struct OutputState {
+        [CCode (cname = "wlr_output_state_init")]
+        public OutputState();
+        public void set_enabled(bool enabled);
+        public void set_mode(OutputMode mode);
+    }
+    
+    [Compact]
+    [CCode (cname = "struct wlr_output_mode", free_function = "", cheader_filename = "wlr/types/wlr_output.h")]
+    public class OutputMode {
+        public int width;
+        public int height;
+        public int refresh;
     }
 }
