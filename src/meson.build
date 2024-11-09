@@ -7,6 +7,7 @@ deps = [
 
 sources = files(
     'main.vala',
+    'utils.vala',
 )
 
 executable(
