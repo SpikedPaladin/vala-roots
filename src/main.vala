@@ -51,28 +51,20 @@ public void main() {
     
     var backend = new Wlr.Backend(display.get_event_loop());
     if (backend == null) {
-        print("Failed to create backend\n");
+        Wlr.log(Wlr.LogImportance.ERROR, "Failed to create backend");
         return;
     }
-    Wlr.log(Wlr.LogImportance.INFO, "Backend created");
     
     state.renderer = new Wlr.Renderer(backend);
-    Wlr.log(Wlr.LogImportance.INFO, "Renderer created");
     state.allocator = new Wlr.Allocator(backend, state.renderer);
-    Wlr.log(Wlr.LogImportance.INFO, "Allocator created");
     
-    Wlr.log(Wlr.LogImportance.INFO, "Adding signals");
     backend.new_output.add(ref state.new_output_listener);
     backend.new_input.add(ref state.new_input_listener);
     
-    Wlr.log(Wlr.LogImportance.INFO, "Signals added");
-    
     if (!backend.start()) {
-        print("backend failed to start\n");
+        Wlr.log(Wlr.LogImportance.ERROR, "Backend failed to start");
         return;
     }
-    
-    print("Started\n");
     
     display.run();
 }
