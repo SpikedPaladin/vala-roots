@@ -7,7 +7,7 @@ namespace Wl {
         [CCode (cname = "wl_display_create")]
         public Display();
         public void run();
-        public Wl.EventLoop get_event_loop();
+        public unowned Wl.EventLoop get_event_loop();
     }
     
     [Compact]
@@ -23,7 +23,7 @@ namespace Wl {
     
     [CCode (cname = "struct wl_signal", free_function = "")]
     public struct Signal {
-        public void add(Listener listener);
+        public void add(ref Listener listener);
     }
     
     [CCode (cname = "struct wl_listener", free_function = "")]
